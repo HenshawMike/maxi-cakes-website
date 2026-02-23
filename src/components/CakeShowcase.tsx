@@ -1,6 +1,7 @@
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useSearch } from "@/context/SearchContext";
 
 import cake1 from "@/assets/cake-1.jpg";
 import cake2 from "@/assets/cake-2.jpg";
@@ -52,30 +53,24 @@ const CakeCard = ({ cake }: { cake: typeof cakes[0] }) => (
   </div>
 );
 
-const CakeShowcase = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+const CakeShowcase = () => {
+  const { searchQuery } = useSearch();
+
+  const filteredCakes = cakes.filter(cake =>
+    cake.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    cake.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <section id="cakes" className="py-20 lg:py-28 overflow-hidden" ref={sectionRef}>
-      <div className="container mx-auto px-4 mb-12 fade-up" ref={(el) => {
-        if (el) {
-          const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) e.target.classList.add("visible"); }, { threshold: 0.2 });
-          obs.observe(el);
-        }
-      }}>
+    <section id="cakes" className="py-20 lg:py-28 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="container mx-auto px-4 mb-12"
+      >
         <p className="font-body text-sm tracking-[0.2em] uppercase text-accent text-center mb-3">
           Our Creations
         </p>
@@ -85,16 +80,48 @@ const CakeShowcase = () => {
         <p className="font-body text-muted-foreground text-center max-w-lg mx-auto">
           Every cake is handcrafted with the finest ingredients and a whole lot of love.
         </p>
-      </div>
+      </motion.div>
 
-      {/* Infinite scrolling marquee */}
-      <div className="relative">
-        <div className="flex animate-marquee gap-6 w-max px-4">
-          {[...cakes, ...cakes].map((cake, i) => (
-            <CakeCard key={`${cake.name}-${i}`} cake={cake} />
-          ))}
-        </div>
-      </div>
+      {/* Swipeable/Draggable Carousel */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.2 }}
+        className="relative px-4"
+      >
+        {filteredCakes.length > 0 ? (
+          <div className="overflow-visible cursor-grab active:cursor-grabbing">
+            <motion.div
+              drag="x"
+              dragConstraints={{ right: 0, left: -((filteredCakes.length * 320) + ((filteredCakes.length - 1) * 24) - (typeof window !== 'undefined' ? window.innerWidth - 64 : 1000)) }}
+              className="flex gap-6 w-max"
+            >
+              {filteredCakes.map((cake, i) => (
+                <CakeCard key={`${cake.name}-${i}`} cake={cake} />
+              ))}
+            </motion.div>
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="font-body text-muted-foreground italic">No cakes found matching "{searchQuery}"</p>
+          </div>
+        )}
+
+        {/* Visual Cue for swiping */}
+        {filteredCakes.length > 0 && (
+          <div className="mt-8 flex justify-center items-center gap-2 md:hidden">
+            <div className="w-8 h-1 bg-[#2D3A24]/10 rounded-full overflow-hidden">
+              <motion.div
+                animate={{ x: [0, 20, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-4 h-full bg-[#4A5D44]"
+              />
+            </div>
+            <span className="text-[10px] uppercase tracking-widest text-[#2D3A24]/40 font-body">Swipe</span>
+          </div>
+        )}
+      </motion.div>
     </section>
   );
 };

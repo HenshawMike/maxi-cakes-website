@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 
@@ -6,20 +6,15 @@ const WHATSAPP_LINK =
   "https://wa.me/?text=Hello%2C%20I'd%20like%20to%20order%20a%20cake%20from%20MAXI%20CAKES%20'N'%20PASTERIES.";
 
 const ContactCTA = () => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) entry.target.classList.add("visible"); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section id="contact" className="py-20 lg:py-28 bg-bakery-dark">
-      <div className="container mx-auto px-4 text-center fade-up" ref={ref}>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="container mx-auto px-4 text-center"
+      >
         <p className="font-body text-sm tracking-[0.2em] uppercase text-accent mb-4">
           Let's Talk Cake
         </p>
@@ -35,7 +30,7 @@ const ContactCTA = () => {
             Chat With Us on WhatsApp
           </a>
         </Button>
-      </div>
+      </motion.div>
     </section>
   );
 };

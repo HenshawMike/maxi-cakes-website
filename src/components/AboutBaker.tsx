@@ -1,24 +1,19 @@
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import bakerPortrait from "@/assets/baker-portrait.jpg";
 
 const AboutBaker = () => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) entry.target.classList.add("visible"); },
-      { threshold: 0.2 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section id="about" className="py-20 lg:py-28 bg-card">
-      <div className="container mx-auto px-4 fade-up" ref={ref}>
+      <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center max-w-5xl mx-auto">
           {/* Portrait */}
-          <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
               <img
                 src={bakerPortrait}
@@ -29,10 +24,16 @@ const AboutBaker = () => {
             </div>
             <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-accent/20 -z-10" />
             <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full bg-primary/10 -z-10" />
-          </div>
+          </motion.div>
 
           {/* Story */}
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-6"
+          >
             <p className="font-body text-sm tracking-[0.2em] uppercase text-accent">
               Meet the Baker
             </p>
@@ -54,7 +55,7 @@ const AboutBaker = () => {
                 Let's make your next occasion unforgettable, one slice at a time. 🎂
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
