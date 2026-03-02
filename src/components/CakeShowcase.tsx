@@ -6,7 +6,7 @@ import { useSearch } from "@/context/SearchContext";
 import cake1 from "@/assets/IMG-20260302-WA0051.jpg";
 import cake2 from "@/assets/IMG-20260302-WA0052.jpg";
 import cake3 from "@/assets/IMG-20260302-WA0053.jpg";
-import cake4 from "@/assets/cake-4.jpg";
+import cake4 from "@/assets/IMG-20260302-WA0054.jpg";
 import cake5 from "@/assets/cake-5.jpg";
 import cake6 from "@/assets/cake-6.jpg";
 import cake7 from "@/assets/cake-7.jpg";
@@ -19,11 +19,8 @@ const cakes = [
   { name: "Elegant Birthday Cake", desc: "A birthday cake is sweet, layered, decorated, often with candles, celebrating someone's special day joyfully.", image: IMG-20260302-WA0051 },
   { name: "Freshly Baked Cupcakes", desc: "Warm, soft, fluffy cupcakes with rich aroma, creamy frosting, and irresistible sweetness.", image: cake2 },
   { name: "Golden meatpie", desc: "Golden flaky pastry filled with savory spiced meat, warm, rich, satisfying.", image: cake3 },
-  { name: "French Macaron Collection", desc: "Delicate pastel macarons in assorted flavours", image: cake4 },
-  { name: "Salted Caramel Bliss", desc: "Buttery caramel drip with crunchy nut toppings", image: cake5 },
-  { name: "Strawberry Shortcake", desc: "Light sponge layered with fresh cream and strawberries", image: cake6 },
-  { name: "Lemon Drizzle Bundt", desc: "Zesty lemon cake with sweet glaze icing", image: cake7 },
-  { name: "Tiramisu Cup", desc: "Classic Italian layers of coffee-soaked sponge and mascarpone", image: cake8 },
+  { name: "Fresh Eggrolls", desc: "Delicate pastel macarons in assorted flavours", image: cake4 },
+  
 ];
 
 const CakeCard = ({ cake }: { cake: typeof cakes[0] }) => (
