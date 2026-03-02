@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { useSearch } from "@/context/SearchContext";
 
 import cake1 from "@/assets/IMG-20260302-WA0051.jpg";
-import cake2 from "@/assets/cake-2.jpg";
+import cake2 from "@/assets/IMG-20260302-WA0052.jpg";
 import cake3 from "@/assets/cake-3.jpg";
 import cake4 from "@/assets/cake-4.jpg";
 import cake5 from "@/assets/cake-5.jpg";
@@ -17,7 +17,7 @@ const WHATSAPP_BASE =
 
 const cakes = [
   { name: "Elegant Birthday Cake", desc: "A birthday cake is sweet, layered, decorated, often with candles, celebrating someone's special day joyfully.", image: IMG-20260302-WA0051 },
-  { name: "Classic Wedding Elegance", desc: "Vanilla buttercream with handcrafted sugar flowers", image: cake2 },
+  { name: "Freshly Baked Cupcakes", desc: "Warm, soft, fluffy cupcakes with rich aroma, creamy frosting, and irresistible sweetness.", image: cake2 },
   { name: "Red Velvet Delight", desc: "Moist red velvet with velvety cream cheese frosting", image: cake3 },
   { name: "French Macaron Collection", desc: "Delicate pastel macarons in assorted flavours", image: cake4 },
   { name: "Salted Caramel Bliss", desc: "Buttery caramel drip with crunchy nut toppings", image: cake5 },
