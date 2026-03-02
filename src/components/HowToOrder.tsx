@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Search, MousePointerClick, MessageCircle } from "lucide-react";
+import { Search, MousePointerClick } from "lucide-react";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 const steps = [
   {
@@ -13,7 +14,7 @@ const steps = [
     desc: "Tap the order button on your favourite cake to start the conversation.",
   },
   {
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     title: "Chat on WhatsApp",
     desc: "We'll confirm your order details, customise to your taste, and arrange delivery.",
   },

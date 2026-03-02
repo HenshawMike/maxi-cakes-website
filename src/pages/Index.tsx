@@ -1,11 +1,10 @@
 import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import CakeShowcase from "@/components/CakeShowcase";
-import AboutBaker from "@/components/AboutBaker";
 import HowToOrder from "@/components/HowToOrder";
 import ContactCTA from "@/components/ContactCTA";
 import Footer from "@/components/Footer";
-import FloatingSearch from "@/components/FloatingSearch";
+import FloatingOrder from "@/components/FloatingOrder";
 
 const Index = () => {
   return (
@@ -13,11 +12,11 @@ const Index = () => {
       <StickyHeader />
       <HeroSection />
       <CakeShowcase />
-      <AboutBaker />
+      {/* <AboutBaker /> */}
       <HowToOrder />
       <ContactCTA />
       <Footer />
-      <FloatingSearch />
+      <FloatingOrder />
     </main>
   );
 };

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
+import SmoothScroll from "./components/SmoothScroll";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,19 +19,19 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="min-h-screen"
-          >
-            <Routes>
-              <Route path="/" element={<Index />} />
-
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </motion.div>
+          <SmoothScroll>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="min-h-screen"
+            >
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </motion.div>
+          </SmoothScroll>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

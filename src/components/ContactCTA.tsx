@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 const WHATSAPP_LINK =
   "https://wa.me/?text=Hello%2C%20I'd%20like%20to%20order%20a%20cake%20from%20MAXI%20CAKES%20'N'%20PASTERIES.";
@@ -24,10 +24,10 @@ const ContactCTA = () => {
         <p className="font-body text-lg text-primary-foreground/70 mb-10 max-w-md mx-auto">
           Send us a message on WhatsApp and let's create something beautiful together.
         </p>
-        <Button variant="whatsapp" size="xl" className="bg-accent text-accent-foreground hover:bg-accent/85" asChild>
-          <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="w-5 h-5" />
-            Chat With Us on WhatsApp
+        <Button variant="whatsapp" size="xl" className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/85 h-auto py-4 whitespace-normal" asChild>
+          <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3">
+            <WhatsAppIcon className="w-6 h-6 shrink-0" />
+            <span className="text-left sm:text-center">Chat With Us on WhatsApp</span>
           </a>
         </Button>
       </motion.div>

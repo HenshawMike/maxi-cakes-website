@@ -1,7 +1,15 @@
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 import { useSearch } from "@/context/SearchContext";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import cake1 from "@/assets/IMG-20260302-WA0051.jpg";
 import cake2 from "@/assets/IMG-20260302-WA0052.jpg";
@@ -10,18 +18,18 @@ import cake4 from "@/assets/IMG-20260302-WA0054.jpg";
 
 
 const WHATSAPP_BASE =
-  "https://wa.me/?text=Hello%2C%20I'd%20like%20to%20order%20";
+  "https://api.whatsapp.com/send?phone=2348036774032&text=Hello%2C%20I'd%20like%20to%20order%20";
 
 const cakes = [
-  { name: "Elegant Birthday Cake", desc: "A birthday cake is sweet, layered, decorated, often with candles, celebrating someone's special day joyfully.", image: IMG-20260302-WA0051 },
+  { name: "Elegant Birthday Cake", desc: "A birthday cake is sweet, layered, decorated, often with candles, celebrating someone's special day joyfully.", image: cake1 },
   { name: "Freshly Baked Cupcakes", desc: "Warm, soft, fluffy cupcakes with rich aroma, creamy frosting, and irresistible sweetness.", image: cake2 },
   { name: "Golden meatpie", desc: "Golden flaky pastry filled with savory spiced meat, warm, rich, satisfying.", image: cake3 },
   { name: "Fresh Eggrolls", desc: "Crispy fried pastry rolls filled with seasoned eggs, vegetables, or meat.", image: cake4 },
   
 ];
 
-const CakeCard = ({ cake }: { cake: typeof cakes[0] }) => (
-  <div className="group flex-shrink-0 w-72 sm:w-80 glass-card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+const CakeCard = ({ cake, className }: { cake: typeof cakes[0]; className?: string }) => (
+  <div className={`group flex-shrink-0 w-72 sm:w-80 glass-card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${className}`}>
     <div className="overflow-hidden h-64">
       <img
         src={cake.image}
@@ -39,7 +47,7 @@ const CakeCard = ({ cake }: { cake: typeof cakes[0] }) => (
           target="_blank"
           rel="noopener noreferrer"
         >
-          <MessageCircle className="w-4 h-4" />
+          <WhatsAppIcon className="w-4 h-4" />
           Order This
         </a>
       </Button>
@@ -50,11 +58,21 @@ const CakeCard = ({ cake }: { cake: typeof cakes[0] }) => (
 
 const CakeShowcase = () => {
   const { searchQuery } = useSearch();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const filteredCakes = cakes.filter(cake =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cake.desc.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, clientWidth, scrollWidth } = scrollContainerRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      const nextScroll = Math.min(scrollLeft + 350, maxScroll);
+      scrollContainerRef.current.scrollTo({ left: nextScroll, behavior: "smooth" });
+    }
+  };
 
   return (
     <section id="cakes" className="py-20 lg:py-28 overflow-hidden">
@@ -76,46 +94,59 @@ const CakeShowcase = () => {
         </p>
       </motion.div>
 
-      {/* Swipeable/Draggable Carousel */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="relative px-4"
-      >
+      <div className="container mx-auto px-4">
         {filteredCakes.length > 0 ? (
-          <div className="overflow-visible cursor-grab active:cursor-grabbing">
-            <motion.div
-              drag="x"
-              dragConstraints={{ right: 0, left: -((filteredCakes.length * 320) + ((filteredCakes.length - 1) * 24) - (typeof window !== 'undefined' ? window.innerWidth - 64 : 1000)) }}
-              className="flex gap-6 w-max"
-            >
-              {filteredCakes.map((cake, i) => (
-                <CakeCard key={`${cake.name}-${i}`} cake={cake} />
-              ))}
-            </motion.div>
-          </div>
+          <>
+            {/* Mobile: Accordion */}
+            <div className="md:hidden">
+              <Accordion type="single" collapsible className="w-full space-y-4">
+                {filteredCakes.map((cake, i) => (
+                  <AccordionItem
+                    key={`mobile-${cake.name}-${i}`}
+                    value={`item-${i}`}
+                    className="border-none glass-card rounded-xl overflow-hidden px-4"
+                  >
+                    <AccordionTrigger className="hover:no-underline py-4 text-foreground font-display font-semibold">
+                      {cake.name}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex justify-center py-2">
+                        <CakeCard cake={cake} className="w-full sm:w-full" />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+
+            {/* Desktop: Horizontal Scroll with Chevron */}
+            <div className="hidden md:block relative group/carousel">
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-8"
+              >
+                {filteredCakes.map((cake, i) => (
+                  <CakeCard key={`desktop-${cake.name}-${i}`} cake={cake} />
+                ))}
+              </div>
+              
+              <button
+                onClick={scrollRight}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-border opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 translate-x-1/2"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6 text-foreground" />
+              </button>
+            </div>
+          </>
         ) : (
           <div className="text-center py-12">
-            <p className="font-body text-muted-foreground italic">No cakes found matching "{searchQuery}"</p>
+            <p className="font-body text-muted-foreground italic">
+              No cakes found matching "{searchQuery}"
+            </p>
           </div>
         )}
-
-        {/* Visual Cue for swiping */}
-        {filteredCakes.length > 0 && (
-          <div className="mt-8 flex justify-center items-center gap-2 md:hidden">
-            <div className="w-8 h-1 bg-[#2D3A24]/10 rounded-full overflow-hidden">
-              <motion.div
-                animate={{ x: [0, 20, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-4 h-full bg-[#4A5D44]"
-              />
-            </div>
-            <span className="text-[10px] uppercase tracking-widest text-[#2D3A24]/40 font-body">Swipe</span>
-          </div>
-        )}
-      </motion.div>
+      </div>
     </section>
   );
 };
