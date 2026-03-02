@@ -7,10 +7,7 @@ import cake1 from "@/assets/IMG-20260302-WA0051.jpg";
 import cake2 from "@/assets/IMG-20260302-WA0052.jpg";
 import cake3 from "@/assets/IMG-20260302-WA0053.jpg";
 import cake4 from "@/assets/IMG-20260302-WA0054.jpg";
-import cake5 from "@/assets/cake-5.jpg";
-import cake6 from "@/assets/cake-6.jpg";
-import cake7 from "@/assets/cake-7.jpg";
-import cake8 from "@/assets/cake-8.jpg";
+
 
 const WHATSAPP_BASE =
   "https://wa.me/?text=Hello%2C%20I'd%20like%20to%20order%20";
@@ -19,7 +16,7 @@ const cakes = [
   { name: "Elegant Birthday Cake", desc: "A birthday cake is sweet, layered, decorated, often with candles, celebrating someone's special day joyfully.", image: IMG-20260302-WA0051 },
   { name: "Freshly Baked Cupcakes", desc: "Warm, soft, fluffy cupcakes with rich aroma, creamy frosting, and irresistible sweetness.", image: cake2 },
   { name: "Golden meatpie", desc: "Golden flaky pastry filled with savory spiced meat, warm, rich, satisfying.", image: cake3 },
-  { name: "Fresh Eggrolls", desc: "Delicate pastel macarons in assorted flavours", image: cake4 },
+  { name: "Fresh Eggrolls", desc: "Crispy fried pastry rolls filled with seasoned eggs, vegetables, or meat.", image: cake4 },
   
 ];
 
