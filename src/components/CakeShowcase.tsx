@@ -1,9 +1,10 @@
-import { useRef } from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { useSearch } from "@/context/SearchContext";
+import Highlight from "./Highlight";
 import {
   Accordion,
   AccordionContent,
@@ -28,7 +29,7 @@ const cakes = [
   
 ];
 
-const CakeCard = ({ cake, className }: { cake: typeof cakes[0]; className?: string }) => (
+const CakeCard = ({ cake, searchQuery, className }: { cake: typeof cakes[0]; searchQuery: string; className?: string }) => (
   <div className={`group flex-shrink-0 w-72 sm:w-80 glass-card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${className}`}>
     <div className="overflow-hidden h-64">
       <img
@@ -39,8 +40,12 @@ const CakeCard = ({ cake, className }: { cake: typeof cakes[0]; className?: stri
       />
     </div>
     <div className="p-5 space-y-3">
-      <h3 className="font-display text-lg font-semibold text-foreground">{cake.name}</h3>
-      <p className="font-body text-sm text-muted-foreground leading-relaxed">{cake.desc}</p>
+      <h3 className="font-display text-lg font-semibold text-foreground">
+        <Highlight text={cake.name} highlight={searchQuery} />
+      </h3>
+      <p className="font-body text-sm text-muted-foreground leading-relaxed">
+        <Highlight text={cake.desc} highlight={searchQuery} />
+      </p>
       <Button variant="whatsapp" size="sm" className="w-full" asChild>
         <a
           href={`${WHATSAPP_BASE}${encodeURIComponent(cake.name)}%20from%20MAXI%20CAKES%20'N'%20PASTERIES.`}
@@ -57,13 +62,21 @@ const CakeCard = ({ cake, className }: { cake: typeof cakes[0]; className?: stri
 
 
 const CakeShowcase = () => {
-  const { searchQuery } = useSearch();
+  const { searchQuery, setSearchQuery } = useSearch();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const filteredCakes = cakes.filter(cake =>
     cake.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     cake.desc.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Auto-scroll to cakes if searching for the first time
+  useEffect(() => {
+    if (searchQuery.length > 2 && window.scrollY < 200) {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [searchQuery]);
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
@@ -75,7 +88,7 @@ const CakeShowcase = () => {
   };
 
   return (
-    <section id="cakes" className="py-20 lg:py-28 overflow-hidden">
+    <section id="cakes" ref={sectionRef} className="py-20 lg:py-28 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -87,68 +100,110 @@ const CakeShowcase = () => {
           Our Creations
         </p>
         <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground text-center mb-4">
-          Baked to Perfection
+          {searchQuery ? "Search Results" : "Baked to Perfection"}
         </h2>
-        <p className="font-body text-muted-foreground text-center max-w-lg mx-auto">
-          Every cake is handcrafted with the finest ingredients and a whole lot of love.
-        </p>
+        {searchQuery ? (
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-sm text-muted-foreground">
+              Showing {filteredCakes.length} {filteredCakes.length === 1 ? "result" : "results"} for "{searchQuery}"
+            </span>
+            <button 
+              onClick={() => setSearchQuery("")}
+              className="text-xs font-medium text-accent hover:underline"
+            >
+              Clear search
+            </button>
+          </div>
+        ) : (
+          <p className="font-body text-muted-foreground text-center max-w-lg mx-auto">
+            Every cake is handcrafted with the finest ingredients and a whole lot of love.
+          </p>
+        )}
       </motion.div>
 
       <div className="container mx-auto px-4">
-        {filteredCakes.length > 0 ? (
-          <>
-            {/* Mobile: Accordion */}
-            <div className="md:hidden">
-              <Accordion type="single" collapsible className="w-full space-y-4">
-                {filteredCakes.map((cake, i) => (
-                  <AccordionItem
-                    key={`mobile-${cake.name}-${i}`}
-                    value={`item-${i}`}
-                    className="border-none glass-card rounded-xl overflow-hidden px-4"
-                  >
-                    <AccordionTrigger className="hover:no-underline py-4 text-foreground font-display font-semibold">
-                      {cake.name}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex justify-center py-2">
-                        <CakeCard cake={cake} className="w-full sm:w-full" />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-
-            {/* Desktop: Horizontal Scroll with Chevron */}
-            <div className="hidden md:block relative group/carousel">
-              <div
-                ref={scrollContainerRef}
-                className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-8"
-              >
-                {filteredCakes.map((cake, i) => (
-                  <CakeCard key={`desktop-${cake.name}-${i}`} cake={cake} />
-                ))}
+        <AnimatePresence mode="wait">
+          {filteredCakes.length > 0 ? (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Mobile: Accordion */}
+              <div className="md:hidden">
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                  {filteredCakes.map((cake, i) => (
+                    <AccordionItem
+                      key={`mobile-${cake.name}-${i}`}
+                      value={`item-${i}`}
+                      className="border-none glass-card rounded-xl overflow-hidden px-4"
+                    >
+                      <AccordionTrigger className="hover:no-underline py-4 text-foreground font-display font-semibold">
+                        <Highlight text={cake.name} highlight={searchQuery} />
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex justify-center py-2">
+                          <CakeCard cake={cake} searchQuery={searchQuery} className="w-full sm:w-full" />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
-              
-              <button
-                onClick={scrollRight}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-border opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 translate-x-1/2"
-                aria-label="Scroll right"
+
+              {/* Desktop: Horizontal Scroll with Chevron */}
+              <div className="hidden md:block relative group/carousel">
+                <div
+                  ref={scrollContainerRef}
+                  className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-8"
+                >
+                  {filteredCakes.map((cake, i) => (
+                    <CakeCard key={`desktop-${cake.name}-${i}`} cake={cake} searchQuery={searchQuery} />
+                  ))}
+                </div>
+                
+                {filteredCakes.length > 3 && (
+                  <button
+                    onClick={scrollRight}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm p-3 rounded-full shadow-lg border border-border opacity-0 group-hover/carousel:opacity-100 transition-opacity duration-300 translate-x-1/2"
+                    aria-label="Scroll right"
+                  >
+                    <ChevronRight className="w-6 h-6 text-foreground" />
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="empty"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-12 flex flex-col items-center gap-4"
+            >
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-2">
+                <SearchX className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="font-display text-xl font-semibold">No pastries found</p>
+                <p className="text-muted-foreground mt-1">
+                  We couldn't find anything matching "{searchQuery}"
+                </p>
+              </div>
+              <Button 
+                variant="outline" 
+                onClick={() => setSearchQuery("")}
+                className="mt-2"
               >
-                <ChevronRight className="w-6 h-6 text-foreground" />
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-12">
-            <p className="font-body text-muted-foreground italic">
-              No cakes found matching "{searchQuery}"
-            </p>
-          </div>
-        )}
+                Show all cakes
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
 };
+
 
 export default CakeShowcase;

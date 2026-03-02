@@ -22,8 +22,17 @@ const StickyHeader = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      const cakesSection = document.getElementById("cakes");
+      if (cakesSection) {
+        const offset = cakesSection.offsetTop - 100; // Trigger slightly before the section
+        setScrolled(window.scrollY >= offset);
+      } else {
+        setScrolled(window.scrollY > 40);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // Initial check
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -79,7 +88,7 @@ const StickyHeader = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className={`h-9 px-4 pl-10 rounded-full text-sm outline-none transition-all duration-300 w-48 focus:w-64 border ${
                 scrolled 
-                  ? "bg-muted border-border text-foreground" 
+                  ? "bg-muted border-border text-foreground placeholder:text-primary/80" 
                   : "bg-white/10 border-white/20 text-white placeholder-white/60 focus:bg-white/20"
               }`}
             />
@@ -162,7 +171,7 @@ const StickyHeader = () => {
                       placeholder="Search pastries..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full h-full px-5 pl-12 rounded-2xl bg-muted border-border text-foreground text-lg outline-none"
+                      className="w-full h-full px-5 pl-12 rounded-2xl bg-muted border-border text-foreground text-lg outline-none placeholder:text-primary/80"
                     />
                     <Search className="absolute left-4 w-6 h-6 text-muted-foreground" />
                     {searchQuery && (
