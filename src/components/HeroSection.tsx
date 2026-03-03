@@ -16,9 +16,9 @@ const HeroSection = () => {
       <motion.div
         initial={{ y: "100%", opacity: 0 }}
         animate={isLoaded ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
-        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-0 z-0"
-        style={{ clipPath: "ellipse(150% 100% at 50% 0%)" }}
+        style={{ clipPath: "ellipse(100% 30% at 50% 100%)" }}
       >
         <img
           src={heroBg}
@@ -41,7 +41,7 @@ const HeroSection = () => {
         >
           MAXI CAKES
           <span className="block text-3xl md:text-4xl lg:text-5xl font-medium italic mt-2 text-primary-foreground/80">
-            'N' Pasteries
+            & Pasteries
           </span>
         </motion.h1>
 
