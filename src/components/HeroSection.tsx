@@ -14,11 +14,10 @@ const HeroSection = () => {
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
       {/* Background image */}
       <motion.div
-        initial={{ y: "100%", opacity: 0 }}
-        animate={isLoaded ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
-        transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 z-0"
-        style={{ clipPath: "ellipse(100% 30% at 50% 100%)" }}
+        initial={{ y: "100%", clipPath: "ellipse(150% 100% at 50% 100%)" }}
+        animate={isLoaded ? { y: 0, clipPath: "ellipse(200% 200% at 50% 50%)" } : { y: "100%", clipPath: "ellipse(150% 100% at 50% 100%)" }}
+        transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 z-0 bg-bakery-dark"
       >
         <img
           src={heroBg}
@@ -37,7 +36,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 font-display text-5xl md:text-7xl lg:text-8xl font-bold text-primary-foreground leading-[1.1] mb-6 drop-shadow-xl"
+          className="mt-4 font-display text-5xl md:text-7xl lg:text-8xl font-bold text-primary-foreground leading-[1.1] mb-6 drop-shadow-2xl"
         >
           MAXI CAKES
           <span className="block text-3xl md:text-4xl lg:text-5xl font-medium italic mt-2 text-primary-foreground/80">
@@ -49,7 +48,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed drop-shadow-md"
+          className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed drop-shadow-2xl"
         >
           Every slice tells a story. We create exquisite cakes & pastries for your sweetest moments.
         </motion.p>
