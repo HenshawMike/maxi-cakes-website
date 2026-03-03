@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -7,23 +8,28 @@ const WHATSAPP_LINK =
   "https://api.whatsapp.com/send?phone=2348036774032&text=Hello%2C%20I'd%20like%20to%20order%20a%20cake%20from%20MAXI%20CAKES%20'N'%20PASTERIES.";
 
 const HeroSection = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
       {/* Background image */}
       <motion.div
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ y: "100%", opacity: 0 }}
+        animate={isLoaded ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
         transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0"
+        className="absolute inset-0 z-0"
+        style={{ clipPath: "ellipse(150% 100% at 50% 0%)" }}
       >
         <img
           src={heroBg}
           alt="Beautiful cake display at Maxi Cakes bakery"
           className="w-full h-full object-cover"
           loading="eager"
+          onLoad={() => setIsLoaded(true)}
         />
         <div className="absolute inset-0 bg-bakery-dark/60" />
       </motion.div>
+
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
