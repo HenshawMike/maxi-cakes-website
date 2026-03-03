@@ -37,11 +37,11 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 font-display text-5xl md:text-7xl lg:text-8xl font-bold text-primary-foreground leading-[1.1] mb-6"
+          className="mt-4 font-display text-5xl md:text-7xl lg:text-8xl font-bold text-primary-foreground leading-[1.1] mb-6 drop-shadow-xl"
         >
           MAXI CAKES
           <span className="block text-3xl md:text-4xl lg:text-5xl font-medium italic mt-2 text-primary-foreground/80">
-            & Pasteries
+            'n' Pasteries
           </span>
         </motion.h1>
 
@@ -49,7 +49,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed"
+          className="font-body text-lg md:text-xl text-primary-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed drop-shadow-md"
         >
           Every slice tells a story. We create exquisite cakes & pastries for your sweetest moments.
         </motion.p>
